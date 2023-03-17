@@ -10,6 +10,9 @@ const Student={
         made:2025
     }
 }
-for(let p in Student.car){
-    console.log(p);
+let value=Object.keys(Student.car);
+console.log(value)
+let Obj=Student.car;
+for(let p in Obj){
+    console.log(Obj[p]);
 }
