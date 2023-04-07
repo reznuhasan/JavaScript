@@ -17,11 +17,31 @@ const showCountries=(countries)=>{
         <h5>Population:${country.population}</h5>
         <h5>Continents:${country.continents[0]}</h5>
         <h5>Region:${country.region}</h5>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="showDetails('${country.name.common}')">
+        Details
+        </button>
         `
         countriesDiv.classList.add('countries')
         box.classList.add('box');
         countriesDiv.append(box)
     })
     all.append(countriesDiv)
+}
+const showDetails=async(name)=>{
+    const url=`https://restcountries.com/v3.1/name/${name}`
+    const res=await fetch(url);
+    const data=await res.json();
+    Details(data[0])
+}
+const Details=(data)=>{
+    const content=document.getElementById('modal-content');
+    content.innerHTML='';
+    content.innerHTML=`
+        <img src='${data.flags.png}'/>
+        <h3>Country Name:${data.name.common}</h3>
+        <h5>Population:${data.population}</h5>
+        <h5>Continents:${data.continents[0]}</h5>
+        <h5>Region:${data.region}</h5>
+    `
 }
 loadContries()
