@@ -6,7 +6,14 @@ searchBtn.addEventListener('click',()=>{
     searchBox.value='';
     loadPhone(searchText)
 })
-
+const searchBox=document.getElementById('searchbox');
+searchBox.addEventListener('keypress',(e)=>{
+    if(e.key==='Enter'){
+        loadPhone(searchBox.value);
+        searchBox.value='';
+    }
+    
+})
 const loadPhone=async(searchText)=>{
     const spinnerBox=document.getElementById('spinner-box')
     spinnerBox.innerHTML=`
@@ -23,7 +30,7 @@ const showData=(phones)=>{
     showBox.innerHTML=``;
     if(phones.length===0){
         const div=document.createElement('div');
-        div.innerHTML=`<h1>No Phone Found</h1>`
+        div.innerHTML=`<h1>No Phone Found,Please try a new search</h1>`
         div.style.width='100%'
         div.style.height='60vh'
         div.style.display='flex';
@@ -44,7 +51,9 @@ const showData=(phones)=>{
                       <h5>Slug:${phone.slug}</h5>
                     </div>
                     <div class="card-footer">
-                    <button type="button" class="btn btn-primary details" id="details">Details</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="loadDetails('${phone.phone_name}')">
+                    Details
+                   </button>
                     </div>
             </div>
            `;
@@ -58,9 +67,20 @@ const showData=(phones)=>{
     
 }
 
-{/* <div class="col">
-              
-            </div> */}
-
-
-// loadPhone();
+const loadDetails=async(name)=>{
+     const res=await fetch(`https://openapi.programming-hero.com/api/phones?search=${name}`)
+     const data=await res.json();
+     showDetails(data.data[0])
+    
+}
+const showDetails=(phone)=>{
+    const box=document.getElementById('modal-box')
+    box.innerHTML=`
+    <img src="${phone.image}" width="300px" height="200px" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">Name:${phone.phone_name}</h5>
+      <h5 >Brand:${phone.brand}</h5>
+      <h5>Slug:${phone.slug}</h5>
+    </div>
+    `
+}
